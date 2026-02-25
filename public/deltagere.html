@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+
+ <title>Deltagere</title>
+
+</head>
+   
+<ul id="deltagere">
+    <li>Henter data...</li>
+</ul>
+
+<script>
+    fetch('/deltagere-json')
+    .then( response => response.json() )
+    .then(data => {
+        let list = document.getElementById('deltagere');
+        list.innerHTML = '';
+        data.forEach(row => {
+            let li = document.createElement('li');
+            li.textContent = row.name;
+            list.appendChild(li);
+        });
+    });
+</script>
+
+
+
+
+</html>

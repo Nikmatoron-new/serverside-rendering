@@ -1,5 +1,10 @@
 {
     "scripts": {
-    "serve": "node index.js"
+        "serve": "node index.js",
+        "dev": "nodemon index.mjs"
+    },
+    "dependencies": {
+        "nodemon": "^3.1.14",
+        "pg": "^8.18.0"
     }
 }
