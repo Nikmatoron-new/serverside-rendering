@@ -18,6 +18,17 @@ app.get('/', (req, res) => {
             <li><a href='/elev-3'>elev 3</a></li>
             <li><a href='/elev-4'>elev 4</a></li>
         </ul>
+        <p><a href='/deltagere-2'>deltagere-2</a></p>
+        <p><a href='/deltagere-json'>deltagere-json</a></p>
+        <p><a href='/bilmerker'>bilmerker</a></p>
+        <p><a href='/bilmerker-json'>bilmerker-json</a></p>
+        <p><a href='/bilmerker.html'>bilmerker-jsonHTML</a></p>
+        <p><a href='/skuespillere'>skuespillere</a></p>
+        <p><a href='/skuespillere-json'>skuespillere-json</a></p>
+        <p><a href='/filmer'>filmer</a></p>
+        <p><a href='/filmer-json'>filmer-json</a></p>
+        <p><a href='/skuespillere-og-filmer'>skuespillere og filmer</a></p>
+        <p><a href='/skuespillere-og-filmer-json'>skuespillere og filmer json</a></p>
     `);
 });
 
@@ -76,6 +87,7 @@ app.get('/elev-4', (req, res) => {
     `);
 });
 
+
 // Først refererer vi til driveren (som ligger i node_modules)
 const { Pool } = require('pg');
 
@@ -105,6 +117,120 @@ app.get('/deltagere-2', async (req, res) => {
     html += "</ul>"
     res.send(html);
 });
+
+
+app.get('/bilmerker', async (req, res) => {
+    // Henter data fra databasen:
+    const result = await pool.query('SELECT * FROM bilmerker');
+
+    // Starter en html-liste:
+    let html = "<h1>Bilmerker</h1>"
+    html += "<ul>"
+
+    // Legger til en <li> for hver rad i databasen:
+    for( const row of result.rows ) {
+        html += "</li><li>" + row.name + "</li>"
+    }
+
+    // Avslutter html-listen og returnerer resultatet:
+    html += "</ul>"
+    res.send(html);
+});
+
+app.get('/bilmerker-json', async (req, res) => {
+    const result = await pool.query('SELECT * FROM bilmerker');
+    res.json(result.rows);
+});
+
+
+app.get('/skuespillere', async (req, res) => {
+    // Henter data fra databasen:
+    const result = await pool.query('SELECT * FROM skuespillere');
+
+    // Starter en html-liste:
+    let html = "<h1>Skuespillere</h1>"
+    html += "<ul>"
+
+    // Legger til en <li> for hver rad i databasen:
+    for( const row of result.rows ) {
+        html += "</li><li>" + row.name + "</li>"
+    }
+
+    // Avslutter html-listen og returnerer resultatet:
+    html += "</ul>"
+    res.send(html);
+});
+
+app.get('/skuespillere-json', async (req, res) => {
+    const result = await pool.query('SELECT * FROM skuespillere');
+    res.json(result.rows);
+});
+
+
+
+app.get('/filmer', async (req, res) => {
+    // Henter data fra databasen:
+    const result = await pool.query('SELECT * FROM filmer');
+
+    // Starter en html-liste:
+    let html = "<h1>Filmer</h1>"
+    html += "<ul>"
+
+    // Legger til en <li> for hver rad i databasen:
+    for( const row of result.rows ) {
+        html += "</li><li>" + row.name + "</li>"
+    }
+
+    // Avslutter html-listen og returnerer resultatet:
+    html += "</ul>"
+    res.send(html);
+});
+
+app.get('/filmer-json', async (req, res) => {
+    const result = await pool.query('SELECT * FROM filmer');
+    res.json(result.rows);
+});
+
+
+app.get('/skuespillere-og-filmer', async (req, res) => {
+    // Henter data fra databasen med JOIN:
+    const result = await pool.query(`
+        SELECT 
+            s.name AS skuespiller,
+            f.name AS film
+        FROM skuespiller_i_film sif
+        JOIN skuespillere s ON sif.skuespiller_id = s.id
+        JOIN filmer f ON sif.film_id = f.id
+        ORDER BY s.name, f.name
+    `);
+
+    // Starter en html-liste:
+    let html = "<h1>Skuespillere og Filmer</h1>"
+    html += "<ul>"
+
+    // Legger til en <li> for hver rad i databasen:
+    for( const row of result.rows ) {
+        html += "<li>" + row.skuespiller + " - " + row.film + "</li>"
+    }
+
+    // Avslutter html-listen og returnerer resultatet:
+    html += "</ul>"
+    res.send(html);
+});
+
+app.get('/skuespillere-og-filmer-json', async (req, res) => {
+    const result = await pool.query(`
+        SELECT 
+            s.name AS skuespiller,
+            f.name AS film
+        FROM skuespiller_i_film sif
+        JOIN skuespillere s ON sif.skuespiller_id = s.id
+        JOIN filmer f ON sif.film_id = f.id
+        ORDER BY s.name, f.name
+    `);
+    res.json(result.rows);
+});
+
 
 app.get('/deltagere-json', async (req, res) => {
     const result = await pool.query('SELECT * FROM users');

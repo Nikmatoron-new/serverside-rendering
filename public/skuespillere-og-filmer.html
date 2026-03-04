@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skuespillere og Filmer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            color: red;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Skuespillere og Filmer</h1>
+    <button onclick="window.history.back()">Tilbake</button>
+    
+    <ul id="filmList"></ul>
+    <div id="error"></div>
+
+    <script>
+        // Henter data fra API-ruten
+        fetch('/skuespillere-og-filmer-json')
+            .then(response => response.json())
+            .then(data => {
+                const filmList = document.getElementById('filmList');
+                
+                if (data.length === 0) {
+                    filmList.innerHTML = '<li>Ingen data funnet</li>';
+                    return;
+                }
+                
+                // Lager HTML <li> for hver rad
+                data.forEach(row => {
+                    const li = document.createElement('li');
+                    li.textContent = row.skuespiller + ' - ' + row.film;
+                    filmList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                document.getElementById('error').textContent = 'Feil: ' + error.message;
+            });
+    </script>
+</body>
+</html>

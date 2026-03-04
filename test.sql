@@ -3,7 +3,59 @@ CREATE TABLE users (
     name VARCHAR(100)
 );
 
+
+
 INSERT INTO users (name) VALUES
     ('Joe Biden'),
     ('Donald Trump'),
-    ('Kamala Harris');
+    ('Bob Joenson'),
+    ('John Doe'),
+    ('Jane Smith'),
+    ('Alice Johnson'),
+    ('Charlie Brown'),
+    ('David Wilson'),
+    ('Emily Davis'),
+    ('Frank Miller');
+
+
+
+-- Opprett tabell for skuespillere (hvis den ikke finnes)
+CREATE TABLE IF NOT EXISTS skuespillere (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+-- Opprett tabell for filmer (hvis den ikke finnes)
+CREATE TABLE IF NOT EXISTS filmer (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+-- Opprett junction-tabell som kopplar skuespillere til filmer
+CREATE TABLE IF NOT EXISTS skuespiller_i_film (
+    id SERIAL PRIMARY KEY,
+    skuespiller_id INT NOT NULL REFERENCES skuespillere(id),
+    film_id INT NOT NULL REFERENCES filmer(id)
+);
+
+-- Legg inn testdata
+INSERT INTO skuespillere (name) VALUES
+    ('Tom Cruise'),
+    ('Jennifer Aniston'),
+    ('Brad Pitt'),
+    ('Angelina Jolie');
+
+INSERT INTO filmer (name) VALUES
+    ('Top Gun'),
+    ('Mission Impossible'),
+    ('Friends'),
+    ('Mr. & Mrs. Smith'),
+    ('Maleficent');
+
+INSERT INTO skuespiller_i_film (skuespiller_id, film_id) VALUES
+    (1, 1),  -- Tom Cruise i Top Gun
+    (1, 2),  -- Tom Cruise i Mission Impossible
+    (2, 3),  -- Jennifer Aniston i Friends
+    (3, 4),  -- Brad Pitt i Mr. & Mrs. Smith
+    (4, 4),  -- Angelina Jolie i Mr. & Mrs. Smith
+    (4, 5);  -- Angelina Jolie i Maleficent
