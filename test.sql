@@ -1,3 +1,9 @@
+-- Slett eksisterende tabeller hvis de finnes
+DROP TABLE IF EXISTS skuespiller_i_film;
+DROP TABLE IF EXISTS skuespillere;
+DROP TABLE IF EXISTS filmer;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100)
@@ -20,19 +26,19 @@ INSERT INTO users (name) VALUES
 
 
 -- Opprett tabell for skuespillere (hvis den ikke finnes)
-CREATE TABLE IF NOT EXISTS skuespillere (
+CREATE TABLE skuespillere (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100)
 );
 
 -- Opprett tabell for filmer (hvis den ikke finnes)
-CREATE TABLE IF NOT EXISTS filmer (
+CREATE TABLE filmer (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100)
 );
 
 -- Opprett junction-tabell som kopplar skuespillere til filmer
-CREATE TABLE IF NOT EXISTS skuespiller_i_film (
+CREATE TABLE skuespiller_i_film (
     id SERIAL PRIMARY KEY,
     skuespiller_id INT NOT NULL REFERENCES skuespillere(id),
     film_id INT NOT NULL REFERENCES filmer(id)

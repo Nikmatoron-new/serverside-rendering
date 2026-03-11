@@ -1,4 +1,7 @@
 
+-- Slett eksisterende tabell hvis den finnes
+DROP TABLE IF EXISTS bilmerker;
+
 CREATE TABLE bilmerker (
     id SERIAL PRIMARY KEY,
     NAME VARCHAR(100)
