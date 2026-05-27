@@ -93,29 +93,42 @@ const { Pool } = require('pg');
 
 // Så lager vi en forbindelse til databasen
 const pool = new Pool({
-  user: 'postgres',
-  password: 'mysecretpassword',
-  host: 'localhost',
-  port: 5432,
+  user: process.env.PGUSER || 'postgres',
+  password: process.env.PGPASSWORD || 'mysecretpassword',
+  host: process.env.PGHOST || 'localhost',
+  port: process.env.PGPORT ? Number(process.env.PGPORT) : 5433,
+  database: process.env.PGDATABASE || 'mydatabase',
 });
+
+pool.connect()
+  .then(client => {
+      client.release();
+      console.log('PostgreSQL connected');
+  })
+  .catch(error => {
+      console.error('PostgreSQL connection error:', error);
+      console.error(error.stack || error);
+      process.exit(1);
+  });
 
 
 app.get('/deltagere-2', async (req, res) => {
-    // Henter data fra databasen:
+  try {
     const result = await pool.query('SELECT * FROM users');
 
-    // Starter en html-liste:
-    let html = "<h1>Deltagere</h1>"
-    html += "<ul>"
+    let html = '<h1>Deltagere</h1>';
+    html += '<ul>';
 
-    // Legger til en <li> for hver rad i databasen:
-    for( const row of result.rows ) {
-        html += "</li><li>" + row.name + "</li>"
+    for (const row of result.rows) {
+      html += '<li>' + row.name + '</li>';
     }
 
-    // Avslutter html-listen og returnerer resultatet:
-    html += "</ul>"
+    html += '</ul>';
     res.send(html);
+  } catch (error) {
+    console.error('Query error:', error);
+    res.status(500).send(`<p>Database query failed: ${error.message}</p>`);
+  }
 });
 
 
@@ -128,8 +141,8 @@ app.get('/bilmerker', async (req, res) => {
     html += "<ul>"
 
     // Legger til en <li> for hver rad i databasen:
-    for( const row of result.rows ) {
-        html += "</li><li>" + row.name + "</li>"
+    for (const row of result.rows) {
+        html += "<li>" + row.name + "</li>"
     }
 
     // Avslutter html-listen og returnerer resultatet:
