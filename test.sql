@@ -2,9 +2,15 @@
 DROP TABLE IF EXISTS skuespiller_i_film;
 DROP TABLE IF EXISTS skuespillere;
 DROP TABLE IF EXISTS filmer;
+DROP TABLE IF EXISTS bilmerker;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+CREATE TABLE bilmerker (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100)
 );
@@ -23,6 +29,17 @@ INSERT INTO users (name) VALUES
     ('Emily Davis'),
     ('Frank Miller');
 
+INSERT INTO bilmerker (name) VALUES
+    ('Toyota Camry'),
+    ('Honda Civic'),
+    ('Ford F-150'),
+    ('Chevrolet Silverado'),
+    ('BMW X5'),
+    ('Mercedes-Benz C-Class'),
+    ('Audi A4'),
+    ('Nissan Altima'),
+    ('Hyundai Elantra'),
+    ('Kia Optima');
 
 
 -- Opprett tabell for skuespillere (hvis den ikke finnes)
